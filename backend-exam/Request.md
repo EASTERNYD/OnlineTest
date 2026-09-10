@@ -375,7 +375,9 @@ Authorization: Bearer <token>
 ]
 ```
 
-> 依赖 DeepSeek 大模型：需在 `application.yml` 配置 `llm.api-key`；`llm.base-url` 默认 `https://api.deepseek.com`，`llm.model` 默认 `deepseek-chat`。
+> 依赖 DeepSeek 大模型：需在 `application.yml` 配置 `llm.api-key`；`llm.base-url` 默认 `https://api.deepseek.com`，`llm.model` 默认 `deepseek-chat`（任何 OpenAI 兼容协议的服务均可，改这三个配置即可切换）。
+>
+> **超时说明**：后端连接超时默认 10 秒、读取超时默认 180 秒（`llm.connect-timeout` / `llm.read-timeout`，毫秒）。AI 生成耗时较长（题数多时可达 1~3 分钟），**前端应将此接口的 axios timeout 单独设为 ≥180 秒**，并在等待期间展示 loading。超时时后端返回 500 + msg「AI 响应超时…请减少生成题数或稍后重试」。
 
 ---
 

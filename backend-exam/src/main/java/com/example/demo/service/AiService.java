@@ -5,10 +5,13 @@ import com.example.demo.dto.AiGenerateDTO;
 import com.example.demo.util.JsonUtil;
 import com.example.demo.vo.QuestionVO;
 import com.fasterxml.jackson.core.type.TypeReference;
+import jakarta.annotation.PostConstruct;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
+import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestClient;
 
 import java.util.HashMap;
@@ -31,7 +34,23 @@ public class AiService {
     @Value("${llm.model}")
     private String model;
 
-    private final RestClient restClient = RestClient.create();
+    /** 连接超时（毫秒），默认 10 秒 */
+    @Value("${llm.connect-timeout:10000}")
+    private int connectTimeout;
+
+    /** 读取超时（毫秒），默认 180 秒 */
+    @Value("${llm.read-timeout:180000}")
+    private int readTimeout;
+
+    private RestClient restClient;
+
+    @PostConstruct
+    public void initRestClient() {
+        SimpleClientHttpRequestFactory factory = new SimpleClientHttpRequestFactory();
+        factory.setConnectTimeout(connectTimeout);
+        factory.setReadTimeout(readTimeout);
+        this.restClient = RestClient.builder().requestFactory(factory).build();
+    }
 
     private static final String SYSTEM_PROMPT = "你是一名专业的考试出题专家，擅长出单项选择题。请严格只返回 JSON，不要输出任何多余文字或 Markdown 代码块。";
 
@@ -67,6 +86,8 @@ public class AiService {
                     .body(body)
                     .retrieve()
                     .body(String.class);
+        } catch (ResourceAccessException e) {
+            throw new BizException("AI 响应超时（读取超时 " + (readTimeout / 1000) + " 秒）或网络不通，请减少生成题数或稍后重试");
         } catch (Exception e) {
             throw new BizException("调用大模型失败: " + e.getMessage());
         }

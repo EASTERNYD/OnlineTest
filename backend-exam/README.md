@@ -122,9 +122,13 @@ llm:
   base-url: https://api.deepseek.com
   api-key: sk-xxxxxxxxxxxxxxxx   # ← 换成你的 DeepSeek API Key
   model: deepseek-chat
+  connect-timeout: 10000         # 连接超时（毫秒），默认 10 秒
+  read-timeout: 180000           # 读取超时（毫秒），默认 3 分钟；AI 生成耗时较长，勿设太小
 ```
 
 未配置 Key 时，其余功能不受影响，仅 AI 生成题目不可用（接口会返回明确提示）。**请勿将填入真实 Key 的该文件提交到公开仓库。**
+
+> 任何 **OpenAI 兼容协议**的服务都可直接切换（改 `base-url`/`api-key`/`model` 三项即可），例如阿里云百炼：`base-url: https://dashscope.aliyuncs.com/compatible-mode/v1`、`model: qwen-plus`。
 
 ---
 

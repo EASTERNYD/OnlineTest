@@ -247,6 +247,7 @@ npm run dev   # 默认 http://localhost:5173（被占用自动换端口，以终
 6. **多选答案**：多选 `answer` 为排序后的字母串（如 `ABD`），交卷时前端将所选选项按字母排序后拼接。
 7. **图片上传**：先 `POST /file/upload` 拿 `url`，再填进轮播图的 `imageUrl`；`url` 是相对路径，拼接 `http://localhost:8080` 访问。
 8. **管理端路由守卫**：`role !== 0` 时禁止进入 `/admin/*`。
+9. **AI 生成题目耗时长**：`POST /question/ai/generate` 可能需要 1~3 分钟（后端读取超时 180 秒）。前端需将此接口的 axios `timeout` 单独调大（建议 ≥180000ms），并在等待期间展示 loading/进度提示，避免用户重复点击。
 
 ---
 

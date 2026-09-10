@@ -37,12 +37,14 @@ export function deleteQuestion(id) {
 }
 
 /**
- * AI 生成题目（管理员，调用 DeepSeek，同步阻塞，耗时长）
+ * AI 生成题目（管理员，调用大模型，同步阻塞，耗时长）
  * body: { knowledgePoint, count?, difficulty?, categoryId? }
  * 返回题目数组（不落库），前端展示供勾选后逐条调 createQuestion 保存
+ * 超时说明：后端读取超时 180s（llm.read-timeout），前端设为 195s 保证后端的
+ * 友好超时提示（BizException → code 500 + msg）先于 axios 通用超时到达用户
  */
 export function aiGenerateQuestion(data) {
-  return request.post('/question/ai/generate', data, { timeout: 180000 })
+  return request.post('/question/ai/generate', data, { timeout: 195000 })
 }
 
 /** Excel 预览（管理员，multipart/form-data，字段名 file） */

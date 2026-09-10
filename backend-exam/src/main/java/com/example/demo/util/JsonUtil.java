@@ -1,6 +1,7 @@
 package com.example.demo.util;
 
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
@@ -8,7 +9,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  */
 public class JsonUtil {
 
-    private static final ObjectMapper MAPPER = new ObjectMapper();
+    private static final ObjectMapper MAPPER = new ObjectMapper()
+            // 忽略 JSON 中未声明的字段（如大模型响应里的 reasoning_content、usage 等）
+            .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
     public static String toJson(Object obj) {
         try {

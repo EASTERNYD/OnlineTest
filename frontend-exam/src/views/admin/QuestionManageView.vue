@@ -193,7 +193,7 @@
           type="info"
           :closable="false"
           show-icon
-          title="AI 生成调用 DeepSeek 大模型，可能需要 1-2 分钟，请耐心等待；后端需配置 llm.api-key 才可用。"
+          title="AI 生成调用大模型（当前接入通义千问），可能需要 1-3 分钟，请耐心等待；后端需配置 llm.api-key 才可用。"
         />
       </div>
       <el-table
