@@ -123,7 +123,7 @@ npm run dev
 
 ## ⚠️ 注意事项
 
-- **敏感配置**：`application.yml` 中的数据库密码与 JWT secret 为开发默认值，**生产部署前必须替换**；若本仓库公开，请勿在其中提交任何真实密钥（含 DeepSeek API Key）。
+- **敏感配置**：`application.yml` 中的数据库密码与 JWT secret 为开发默认值，**生产部署前必须替换**；若需要公开，请勿在其中提交任何真实密钥（含API Key）。
 - **已知边界**：AI 出题需配置真实 `llm.api-key`；考试无续考机制（答题中刷新需重新开考）；Excel 导入仅支持单选题。详见 [PROJECT.md · 已知边界](PROJECT.md)。
 
 ## 🔗 核心流程
