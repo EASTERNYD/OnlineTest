@@ -68,16 +68,17 @@ OnlineTest/
 cd backend-exam
 ```
 
-首次启动前配置数据库密码（推荐环境变量，避免真实密码进入版本库）：
+首次启动前，编辑 `backend-exam/src/main/resources/application.yml` 填入你自己的配置：
 
-```bash
-# Windows cmd（当前会话有效）
-set MYSQL_PASSWORD=你的MySQL密码
-# PowerShell
-$env:MYSQL_PASSWORD="你的MySQL密码"
+```yaml
+spring:
+  datasource:
+    password: root        # ← 改成你的 MySQL 密码
+llm:
+  api-key: sk-xxxxxxxx    # ← 可选：DeepSeek Key（AI 出题用）
 ```
 
-可选：`LLM_API_KEY`（DeepSeek Key，AI 出题用）、`JWT_SECRET`（生产必换）、`FILE_UPLOAD_DIR`（上传目录，默认 `backend-exam/upload`）。也可直接修改 `application.yml` 中的默认值，但**请勿把真实密钥提交到仓库**。
+> ⚠️ **改完的 `application.yml` 不要提交/推送到公开仓库**（含真实密码/密钥）。本仓库维护者已用 `git update-index --skip-worktree` 忽略该文件的本地改动，克隆者请勿 `git add` 它。
 
 启动（二选一）：
 

@@ -69,28 +69,25 @@ src/main/resources/
 
 ### 2. 数据库配置
 
-数据库连接默认 `localhost:3306/exam_system`（库不存在会自动创建），密码通过**环境变量**注入，避免真实密码进入版本库：
+数据库连接默认 `localhost:3306/exam_system`（库不存在会自动创建）。首次启动前，编辑 `src/main/resources/application.yml` 填入你的 MySQL 密码：
 
-```bash
-# Windows cmd（当前会话有效）
-set MYSQL_PASSWORD=你的MySQL密码
-# PowerShell
-$env:MYSQL_PASSWORD="你的MySQL密码"
-# Linux / macOS
-export MYSQL_PASSWORD=你的MySQL密码
+```yaml
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/exam_system?createDatabaseIfNotExist=true&...   # 库不存在会自动创建
+    username: root
+    password: root    # ← 改成你自己的 MySQL 密码
 ```
 
-对应 `application.yml` 中的配置为 `password: ${MYSQL_PASSWORD:root}`（未设置环境变量时回退为 `root`）。
+其他可按需修改的配置项（同一文件）：
 
-其他可选环境变量：
-
-| 环境变量 | 用途 | 默认值 |
+| 配置项 | 用途 | 仓库中的值 |
 | :--- | :--- | :--- |
-| `LLM_API_KEY` | DeepSeek API Key（AI 生成题目） | 占位符（未配置时 AI 功能不可用） |
-| `JWT_SECRET` | JWT 签名密钥 | 开发占位值（**生产必须替换**） |
-| `FILE_UPLOAD_DIR` | 图片上传目录 | `./upload`（相对后端运行目录） |
+| `llm.api-key` | DeepSeek API Key（AI 生成题目） | 占位符（未填时 AI 功能不可用） |
+| `jwt.secret` | JWT 签名密钥 | 开发占位值（**生产必须替换**） |
+| `file.upload-dir` | 图片上传目录 | `./upload`（相对后端运行目录） |
 
-> 在 IDEA 中运行 `DemoApplication` 时，在 Run Configuration → Environment variables 里设置以上变量即可。
+> ⚠️ **填入真实密码/密钥后的 `application.yml` 不要提交到公开仓库。** 本地开发建议执行 `git update-index --skip-worktree src/main/resources/application.yml` 让 git 忽略对该文件的本地改动（撤销用 `--no-skip-worktree`）。
 
 首次启动会自动：**建库 → 执行 `schema.sql` 建表 → 灌入种子数据**（2 个账号 + 4 个分类 + 12 道样例题目），无需手动建表。
 
@@ -118,14 +115,16 @@ mvnw.cmd spring-boot:run
 
 ### 5. AI 生成题目配置（可选）
 
-如需使用「AI 生成题目」功能，通过环境变量注入 DeepSeek API Key：
+如需使用「AI 生成题目」功能，编辑 `src/main/resources/application.yml` 填入 DeepSeek API Key：
 
-```bash
-set LLM_API_KEY=sk-你的真实Key        # Windows cmd
-$env:LLM_API_KEY="sk-你的真实Key"     # PowerShell
+```yaml
+llm:
+  base-url: https://api.deepseek.com
+  api-key: sk-xxxxxxxxxxxxxxxx   # ← 换成你的 DeepSeek API Key
+  model: deepseek-chat
 ```
 
-未配置 Key 时，其余功能不受影响，仅 AI 生成题目不可用（接口会返回明确提示）。**请勿将真实 Key 写入 `application.yml` 提交到仓库。**
+未配置 Key 时，其余功能不受影响，仅 AI 生成题目不可用（接口会返回明确提示）。**请勿将填入真实 Key 的该文件提交到公开仓库。**
 
 ---
 
@@ -278,5 +277,5 @@ $env:LLM_API_KEY="sk-你的真实Key"     # PowerShell
 ## 九、常见问题
 
 1. **`mvnw.cmd` 报 `JAVA_HOME is not defined correctly`**：请先 `set JAVA_HOME=<你的JDK路径>`。
-2. **启动报 `Access denied for user 'root'`**：环境变量 `MYSQL_PASSWORD` 未设置或与你的 MySQL 密码不一致，设置正确密码后重启。
+2. **启动报 `Access denied for user 'root'`**：`application.yml` 里的 `password` 与你的 MySQL 密码不一致，改成正确密码后重启。
 3. **端口 8080 被占用**：修改 `application.yml` 中 `server.port`。

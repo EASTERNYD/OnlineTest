@@ -327,9 +327,10 @@ GET /record/admin/{id}（任意记录逐题明细）｜ DELETE /record/admin/{id
 ```bash
 # 1) 后端（先）
 cd backend-exam
-#    首次请设置环境变量（真实密码/密钥不要写进 application.yml 提交）：
-#    MYSQL_PASSWORD ← 你的 MySQL 密码（必需）
-#    LLM_API_KEY    ← DeepSeek Key（可选，AI 出题用）
+#    首次请编辑 src/main/resources/application.yml：
+#    spring.datasource.password ← 你的 MySQL 密码（必需，占位值 root）
+#    llm.api-key               ← DeepSeek Key（可选，AI 出题用）
+#    ⚠️ 填入真实密码/密钥后的该文件不要提交到公开仓库
 mvnw.cmd spring-boot:run       # Linux/macOS: ./mvnw spring-boot:run
 #    → http://localhost:8080 ，文档 /doc.html
 
@@ -344,15 +345,17 @@ npm run dev
 
 ### 8.3 关键配置项（backend application.yml）
 
-| 配置 | 默认值 | 说明 |
+| 配置 | 仓库中的值 | 说明 |
 | :--- | :--- | :--- |
 | `server.port` | 8080 | 与前端代理 target 保持一致 |
-| `spring.datasource.password` | `${MYSQL_PASSWORD:root}` | **真实密码用环境变量 `MYSQL_PASSWORD` 注入**；URL 带 `createDatabaseIfNotExist=true` 自动建库 |
+| `spring.datasource.password` | `root`（占位） | **首次启动前改成你的 MySQL 密码，改动勿提交**；URL 带 `createDatabaseIfNotExist=true` 自动建库 |
 | `spring.sql.init` | always + db/schema.sql | 幂等建表 |
-| `jwt.secret` / `jwt.expiration` | `${JWT_SECRET:开发占位值}` / 24h | **生产必须通过 `JWT_SECRET` 环境变量替换** |
-| `file.upload-dir` | `${FILE_UPLOAD_DIR:./upload}` | 图片落盘目录（相对后端运行目录，即 backend-exam/upload） |
-| `llm.api-key` | `${LLM_API_KEY:占位符}` | **通过 `LLM_API_KEY` 环境变量注入真实 Key 才可用 AI 出题** |
+| `jwt.secret` / `jwt.expiration` | 开发占位值 / 24h | **生产必须替换 secret** |
+| `file.upload-dir` | `./upload` | 图片落盘目录（相对后端运行目录，即 backend-exam/upload） |
+| `llm.api-key` | 占位符 | **填入真实 DeepSeek Key 才可用 AI 出题，改动勿提交** |
 | `knife4j.enable` | true | 生产可关闭 |
+
+> 本地开发建议：`git update-index --skip-worktree src/main/resources/application.yml`，让 git 忽略对该文件的本地改动，杜绝真实密码被误提交（撤销用 `--no-skip-worktree`）。
 
 ### 8.4 前端开发代理（vite.config.js）
 
