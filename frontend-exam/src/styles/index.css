@@ -1,0 +1,57 @@
+/* 全局基础样式 */
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#app {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB',
+    'Microsoft YaHei', Arial, sans-serif;
+  background-color: #f5f7fa;
+  color: #303133;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* 通用页面容器 */
+.page-container {
+  padding: 16px;
+}
+
+/* 卡片之间的间距 */
+.mb16 {
+  margin-bottom: 16px;
+}
+
+/* 表格工具条 */
+.table-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+/* 公告/解析等长文本保留换行 */
+.text-pre-wrap {
+  white-space: pre-wrap;
+  word-break: break-word;
+  line-height: 1.8;
+}
+
+/* 链接样式 */
+.link {
+  color: var(--el-color-primary);
+  cursor: pointer;
+}
+
+.link:hover {
+  color: var(--el-color-primary-light-3);
+}
