@@ -40,6 +40,10 @@ llm:
   # TODO: 填入你的 DeepSeek API Key（改动勿提交到公开仓库）
   api-key: sk-xxxxxxxxxxxxxxxx
   model: deepseek-chat
+  # 连接超时（毫秒）
+  connect-timeout: 10000
+  # 读取超时（毫秒）——AI 生成耗时较长，默认 3 分钟
+  read-timeout: 180000
 
 # Knife4j / springdoc 接口文档
 knife4j:
